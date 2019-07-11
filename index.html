@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html manifest = "banksearch.appcache">
 <head>
+<meta charset = "UTF-8">
 <title>Bank Branches</title>
 </head>
 <body>
@@ -14,9 +15,12 @@
 <option value="CHENNAI">Chennai</option>
 </select>
 <input type = "search" id = "find" onkeyup="search()">
+<button id = "favid" onclick = "favourite()">Favourite</button>
 <output name = "display" id = "display"></output>
 </body>
 <script>
+var arr = [];
+var r = 0;
  function load(){
 var req = new XMLHttpRequest()
 var val=document.getElementById("city").value
@@ -44,7 +48,6 @@ function search(){
 				txt += "<tr>";
 				for(var x = 0;x<8;x++)
 					{
-						var bid=data[i][ser[x]];
 						txt += "<td>" + data[i][ser[x]] + "</td>";
 					}
 				txt += "<td>"+"<button id = btn value ="+data[i].ifsc+" onclick= myscript(value)>"+"Favourite"+"</button>"+"</td>";
@@ -58,7 +61,48 @@ function search(){
 }
 function myscript(a){
 	var b =a
-	console.log(b);
+	arr[r] = b;
+	r++;
+	cookievalue = escape(arr)+";";
+	document.cookie = "name = " + cookievalue;
+	value = document.cookie;
+	//var val="ifsc1"
+	//document.cookie = "val = a";
+	//var x = document.cookie;
+	//console.log();
+	//var user = accessCookie(val)
+	//console.log(arr);
+	//var json_str = JSON.stringify(arr);
+	//cookies.set('mycookie',json_str);
+	//var json_str1 = cookies.get('mycookie');
+	//var arr1 = JSON.parse(json_str1);
+	//console.log(arr1);
 }
+    function favourite()
+    {
+    	var i,j,txt=""
+	txt += "<table border='1' width = '800px'>"
+	txt += "<tr><th>" + "IFSC" + "</th><th>" + "Branch ID" + "</th><th>" + "Branch" + "</th><th>" + "Address" + "</th><th>" + "City" + "</th><th>" + "District" + "</th><th>" + "State" + "</th><th>" + "Bank Name" + "</th></tr>";
+	
+	for (i in data)
+	{
+		var ser=["ifsc", "bank_id", "branch", "address", "city","district","state","bank_name"];
+		for(j in arr)
+		{
+			if(data[i].ifsc == arr[j] || data[i].ifsc === arr[j])
+			{	
+				txt += "<tr>";
+				for(var x = 0;x<8;x++)
+					{
+						txt += "<td>" + data[i][ser[x]] + "</td>";
+					}
+				txt += "</tr>";
+				break;
+			}
+		}
+	}
+	txt += "</table>"  
+    document.getElementById("display").innerHTML = txt;
+    }
 </script>
 </html>
